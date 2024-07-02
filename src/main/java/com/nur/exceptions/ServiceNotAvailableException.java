@@ -3,10 +3,10 @@ package com.nur.exceptions;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TransactionNotFoundException extends RuntimeException{
+public class ServiceNotAvailableException extends RuntimeException {
+
     private String errorCode;
     private String errorMessage;
-
 
     public String getErrorCode() {
         return errorCode;

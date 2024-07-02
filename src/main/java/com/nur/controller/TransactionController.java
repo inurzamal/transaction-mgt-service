@@ -18,13 +18,14 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
+
     @PostMapping("transaction/create")
     public ResponseEntity<TransactionResponse> createTransaction(@RequestBody TransactionRequest transactionRequest) {
         try {
             TransactionResponse createdTransaction = transactionService.createTransaction(transactionRequest);
             return new ResponseEntity<>(createdTransaction, HttpStatus.CREATED);
         } catch (ResponseStatusException ex) {
-            return new ResponseEntity<>(null, ex.getStatusCode());
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
@@ -39,18 +40,13 @@ public class TransactionController {
     }
 
     @GetMapping("transaction/status/{id}")
-    public ResponseEntity<TransactionResponse> getTransactionStatus(@PathVariable Long id) {
+    public ResponseEntity<?> getTransactionStatus(@PathVariable Long id) {
         try {
             TransactionResponse transaction = transactionService.getTransactionStatus(id);
             return new ResponseEntity<>(transaction, HttpStatus.OK);
         } catch (ResponseStatusException ex) {
-            return new ResponseEntity<>(null, ex.getStatusCode());
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
-
-//    @ExceptionHandler(ResponseStatusException.class)
-//    public ResponseEntity<String> handleResponseStatusException(ResponseStatusException ex) {
-//        return new ResponseEntity<>(ex.getReason(), ex.getStatusCode());
-//    }
 
 }

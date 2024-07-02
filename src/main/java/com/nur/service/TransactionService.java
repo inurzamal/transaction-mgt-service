@@ -4,6 +4,7 @@ import com.nur.dto.Account;
 import com.nur.dto.TransactionRequest;
 import com.nur.dto.TransactionResponse;
 import com.nur.entity.Transaction;
+import com.nur.exceptions.ServiceNotAvailableException;
 import com.nur.exceptions.TransactionNotFoundException;
 import com.nur.repository.TransactionRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -52,7 +53,7 @@ public class TransactionService {
 
     public TransactionResponse getTransactionStatus(Long id) {
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFoundException("Transaction not found"));
+                .orElseThrow(() -> new TransactionNotFoundException());
         return mapToTransactionResponse(transaction);
     }
 
@@ -102,12 +103,11 @@ public class TransactionService {
 
     // Fallback methods
     public TransactionResponse fallbackCreateTransaction(TransactionRequest transactionRequest, Throwable t) {
-        throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Service is down. Please try again later.");
+        throw new ServiceNotAvailableException();
     }
 
     public List<TransactionResponse> fallbackGetTransactionHistory(String accountNumber, Throwable t) {
         throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Service is down. Please try again later.");
     }
-
 
 }
