@@ -1,8 +1,6 @@
 package com.nur.service;
 
-import com.nur.dto.Account;
-import com.nur.dto.TransactionRequest;
-import com.nur.dto.TransactionResponse;
+import com.nur.dto.*;
 import com.nur.entity.Transaction;
 import com.nur.exceptions.ServiceNotAvailableException;
 import com.nur.exceptions.TransactionNotFoundException;
@@ -69,21 +67,21 @@ public class TransactionService {
 
     private boolean processTransaction(Transaction transaction) {
         // Call AccountService to get account details
-        Optional<Account> accountOpt = accountClient.getAccountByAccountNumber(transaction.getAccountNumber());
+        Optional<AccountResponse> accountOpt = accountClient.getAccountByAccountNumber(transaction.getAccountNumber());
 
         if (accountOpt.isPresent()) {
-            Account account = accountOpt.get();
+            AccountResponse account = accountOpt.get();
             if ("debit".equalsIgnoreCase(transaction.getTransactionType())) {
                 if (account.getBalance().compareTo(transaction.getAmount()) >= 0) {
                     account.setBalance(account.getBalance().subtract(transaction.getAmount()));
-                    accountClient.updateAccount(account);
+                    accountClient.updateAccount(account.getId(), account);
                     return true;
                 } else {
                     return false; // Insufficient balance
                 }
             } else if ("credit".equalsIgnoreCase(transaction.getTransactionType())) {
                 account.setBalance(account.getBalance().add(transaction.getAmount()));
-                accountClient.updateAccount(account);
+                accountClient.updateAccount(account.getId(), account);
                 return true;
             }
         }

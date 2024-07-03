@@ -1,8 +1,11 @@
 package com.nur.service;
 
-import com.nur.dto.Account;
+import com.nur.dto.AccountResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
@@ -10,8 +13,8 @@ import java.util.Optional;
 public interface AccountServiceFeignClient {
 
     @GetMapping("/account/{accountNumber}")
-    Optional<Account> getAccountByAccountNumber(@PathVariable("accountNumber") String accountNumber);
+    Optional<AccountResponse> getAccountByAccountNumber(@PathVariable("accountNumber") String accountNumber);
 
-    @PutMapping("/account/update")
-    void updateAccount(@RequestBody Account account);
+    @PutMapping("/account/update/{id}")
+    void updateAccount(@PathVariable("id") Long id, @RequestBody AccountResponse accountResponse);
 }
