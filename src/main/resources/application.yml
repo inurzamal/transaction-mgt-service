@@ -45,6 +45,9 @@ resilience4j:
         recordExceptions:
           - java.io.IOException
           - java.util.concurrent.TimeoutException
+          - com.nur.exceptions.ServiceNotAvailableException
+          - org.springframework.web.server.ResponseStatusException
     instances:
       accountService:
         baseConfig: default
+

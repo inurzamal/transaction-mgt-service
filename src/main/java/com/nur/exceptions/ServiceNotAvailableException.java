@@ -8,6 +8,19 @@ public class ServiceNotAvailableException extends RuntimeException {
     private String errorCode;
     private String errorMessage;
 
+    public ServiceNotAvailableException() {
+    }
+
+    public ServiceNotAvailableException(String errorCode, String errorMessage) {
+        super(errorMessage);
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
+
+    public ServiceNotAvailableException(Throwable cause) {
+        super(cause);
+    }
+
     public String getErrorCode() {
         return errorCode;
     }
